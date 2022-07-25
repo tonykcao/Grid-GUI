@@ -18,7 +18,6 @@ class Game {
         bool running() {return isRunning;};
 
     private:
-        Uint32 frameDelay;
         SDL_bool mouseActive = SDL_FALSE;
         SDL_bool mouseHover = SDL_FALSE;
 
