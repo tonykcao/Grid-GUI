@@ -35,8 +35,6 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 
 void Game::handleEvents() {
     SDL_Event event;
-    SDL_bool mouseActive = SDL_FALSE;
-    SDL_bool mouseHover = SDL_FALSE;
     SDL_PollEvent(&event);
     switch (event.type) {
         case SDL_KEYDOWN:
@@ -82,6 +80,15 @@ void Game::handleEvents() {
         default:
             break;
     }
+}
+
+void Game::update() {
+    count++;
+    // std::cout << count << "\n";
+}
+
+void Game::render() {
+    SDL_SetRenderDrawColor(renderer, background.r, background.g,background.b, background.a);
     SDL_RenderClear(renderer);
     //draw gridlines
     SDL_SetRenderDrawColor(renderer, lineColor.r, lineColor.g,
@@ -110,17 +117,6 @@ void Game::handleEvents() {
                             gridCursorColor.a);
     SDL_RenderFillRect(renderer, &cursorGrid);
 
-    SDL_RenderPresent(renderer);
-}
-
-void Game::update() {
-    count++;
-    // std::cout << count << "\n";
-}
-
-void Game::render() {
-    SDL_RenderClear(renderer);
-    //render things
     SDL_RenderPresent(renderer);
 
 
