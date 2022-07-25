@@ -4,7 +4,7 @@ LIBS := -lSDL2
 MAIN := main.cpp
 DEPENDENCY := game.cpp
 
-all: main.cpp game.cpp
+default: main.cpp game.cpp
 	$(CXX) $(DEBUG) $(MAIN) $(DEPENDENCY) $(CFLAGS) $(LIBS) -o main.o
 
 clean:
