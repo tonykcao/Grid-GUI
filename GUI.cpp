@@ -1,13 +1,13 @@
-#include "game.h"
+#include "GUI.h"
 
-Game::Game() {
+GUI::GUI() {
 }
 
-Game::~Game() {
+GUI::~GUI() {
 
 }
 
-void Game::init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen) {
+void GUI::init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen) {
     int flags = 0;
     if (fullscreen) {
         flags = SDL_WINDOW_FULLSCREEN;
@@ -33,7 +33,7 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 }
 
 
-void Game::handleEvents() {
+void GUI::handleEvents() {
     SDL_Event event;
     SDL_PollEvent(&event);
     switch (event.type) {
@@ -88,12 +88,12 @@ void Game::handleEvents() {
     }
 }
 
-void Game::update() {
+void GUI::update() {
     count++;
     // std::cout << count << "\n";
 }
 
-void Game::render() {
+void GUI::render() {
     SDL_SetRenderDrawColor(renderer, background.r, background.g,background.b, background.a);
     SDL_RenderClear(renderer);
     //draw gridlines
@@ -128,9 +128,9 @@ void Game::render() {
 
 }
 
-void Game::clean() {
+void GUI::clean() {
     SDL_DestroyWindow(window);
     SDL_DestroyRenderer(renderer);
     SDL_Quit();
-    std::cout << "Game cleaned!\n";
+    std::cout << "GUI cleaned!\n";
 }
