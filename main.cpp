@@ -1,18 +1,18 @@
-#include "game.h"
+#include "GUI.h"
 
-Game* game = nullptr;
+GUI* gui = nullptr;
 
 int main(int argc, const char* argv[]) {
-    game = new Game();
+    gui = new GUI();
 
-    game->init("Game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, winW-1, winH-1, false);
+    gui->init("GameTest", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, winW-1, winH-1, false);
 
-    while (game->running()) {
-        game->handleEvents();
-        game->update();
-        game->render();
+    while (gui->running()) {
+        gui->handleEvents();
+        gui->update();
+        gui->render();
     }
 
-    game->clean();
+    gui->clean();
     return 0;
 };
