@@ -1,4 +1,4 @@
-Credits: code derived and inpired by
+Credits: code derived from and inpired by
 
 https://github.com/catsocks/sdl-grid/
 
