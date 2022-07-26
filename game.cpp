@@ -58,13 +58,19 @@ void Game::handleEvents() {
             }
             break;
         case SDL_MOUSEBUTTONDOWN:
+            mouseHold = SDL_TRUE;
             cursorGrid.x = (event.motion.x / cellSize) * cellSize;
             cursorGrid.y = (event.motion.y / cellSize) * cellSize;
             break;
+        case SDL_MOUSEBUTTONUP:
+            mouseHold = SDL_FALSE;
         case SDL_MOUSEMOTION:
-            cursorGhost.x = (event.motion.x / cellSize) * cellSize;
             cursorGhost.y = (event.motion.y / cellSize) * cellSize;
-
+            cursorGhost.x = (event.motion.x / cellSize) * cellSize;
+            if (mouseHold) {
+                cursorGrid.x = (event.motion.x / cellSize) * cellSize;
+                cursorGrid.y = (event.motion.y / cellSize) * cellSize;
+            }
             if (!mouseActive)
                 mouseActive = SDL_TRUE;
             break;

@@ -20,6 +20,7 @@ class Game {
     private:
         SDL_bool mouseActive = SDL_FALSE;
         SDL_bool mouseHover = SDL_FALSE;
+        SDL_bool mouseHold = SDL_FALSE;
 
         int count;
         bool isRunning;
