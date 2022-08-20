@@ -120,11 +120,14 @@ void GUI::render() {
         SDL_SetRenderDrawColor(renderer, background.r, background.g,background.b, background.a);
         SDL_RenderClear(renderer);
         SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+        if (mouseHover) {
+            renderRect(cursorGhost, ghostCursorColor);
+        }
         //draw walls
         for (int row = 0; row < gridW; row++) {
                 for (int col = 0; col < gridH; col++) {
-                    if (board->isWall(row, col)) {
-                        SDL_Rect wall = {col*cellSize, row*cellSize, cellSize, cellSize};
+                    if (board->isWall(col, row)) {
+                        SDL_Rect wall = {row*cellSize, col*cellSize, cellSize, cellSize};
                         renderRect(wall, wallColor);
                     }
                 }
@@ -132,9 +135,6 @@ void GUI::render() {
         // Draw grid cursors.
         renderRect(cursorStart, startCursorColor);
         renderRect(cursorTarget, targetCursorColor);
-        if (mouseHover) {
-            renderRect(cursorGhost, ghostCursorColor);
-        }
 
 
         //draw gridlines
@@ -152,6 +152,8 @@ void GUI::render() {
 
         // present
         SDL_RenderPresent(renderer);
+        board->print();
+        std::cout<< "\n";
         active = false;
     }
 }

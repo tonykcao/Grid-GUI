@@ -2,8 +2,10 @@
 #include <SDL2/SDL.h>
 
 const int cellSize = 30;
-const int gridW = 32;
-const int gridH = 24;
+// const int gridW = 32;
+// const int gridH = 24;
+const int gridW = 15;
+const int gridH = 10;
 const int winW = gridW*cellSize +1;
 const int winH = gridH*cellSize +1;
 

@@ -29,14 +29,10 @@ class GUI {
         SDL_Renderer* renderer;
 
 
-        SDL_Rect cursorStart = {
-            .x = (gridW - 1) / 2 * cellSize,
-            .y = (gridH - 1) / 2 * cellSize,
-            .w = cellSize,
-            .h = cellSize,
-        };
-        SDL_Rect cursorTarget = {cursorStart.x+cellSize, cursorStart.y, cellSize, cellSize};
+        SDL_Rect cursorStart{.w = cellSize, .h = cellSize};
+        // SDL_Rect cursorTarget = {cursorStart.x+cellSize, cursorStart.y, cellSize, cellSize};
+        SDL_Rect cursorTarget{.w = cellSize, .h = cellSize};
         SDL_Rect cursorGhost = {cursorStart.x, cursorStart.y, cellSize, cellSize};
         SDL_Rect* activeCursor = &cursorGhost;
-        Board* board= new Board(gridH, gridW, (gridH - 1) / 2, (gridW - 1) / 2, gridH/2, gridW/2);
+        Board* board= new Board(gridH, gridW, 0, 0, 6, 9);
 };

@@ -21,7 +21,7 @@ class Board {
             startC = cStart;
             endR = rEnd;
             endC = dcEnd;
-            arrBoard = new Tile**[rows];
+            arrBoard = new Tile**[rows]{};
             for (int row = 0; row < rows; row++) {
                 arrBoard[row] = new Tile*[cols];
                 for (int col = 0; col < cols; col++) {
