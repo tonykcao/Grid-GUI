@@ -4,7 +4,6 @@ GUI::GUI() {
 }
 
 GUI::~GUI() {
-
 }
 
 void GUI::init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen) {
@@ -32,53 +31,65 @@ void GUI::init(const char* title, int xpos, int ypos, int width, int height, boo
     }
 }
 
-
 void GUI::handleEvents() {
     SDL_Event event;
     SDL_PollEvent(&event);
     switch (event.type) {
         case SDL_KEYDOWN:
             switch (event.key.keysym.sym) {
-            case SDLK_w:
-            case SDLK_UP:
-                cursorGrid.y -= cellSize;
-                break;
-            case SDLK_s:
-            case SDLK_DOWN:
-                cursorGrid.y += cellSize;
-                break;
-            case SDLK_a:
-            case SDLK_LEFT:
-                cursorGrid.x -= cellSize;
-                break;
-            case SDLK_d:
-            case SDLK_RIGHT:
-                cursorGrid.x += cellSize;
-                break;
+                // case SDLK_w:
+                // case SDLK_UP:
+                //     cursorStart.y -= cellSize;
+                //     break;
+                // case SDLK_s:
+                // case SDLK_DOWN:
+                //     cursorStart.y += cellSize;
+                //     break;
+                // case SDLK_a:
+                // case SDLK_LEFT:
+                //     cursorStart.x -= cellSize;
+                //     break;
+                // case SDLK_d:
+                // case SDLK_RIGHT:
+                //     cursorStart.x += cellSize;
+                //     break;
+                case SDLK_c:
+                    board->clear();
+                    break;
             }
+            active = true;
             break;
         case SDL_MOUSEBUTTONDOWN:
-            mouseHold = SDL_TRUE;
-            cursorGrid.x = (event.motion.x / cellSize) * cellSize;
-            cursorGrid.y = (event.motion.y / cellSize) * cellSize;
-            break;
-        case SDL_MOUSEBUTTONUP:
-            mouseHold = SDL_FALSE;
-        case SDL_MOUSEMOTION:
-            cursorGhost.y = (event.motion.y / cellSize) * cellSize;
-            cursorGhost.x = (event.motion.x / cellSize) * cellSize;
-            if (mouseHold) {
-                cursorGrid.x = (event.motion.x / cellSize) * cellSize;
-                cursorGrid.y = (event.motion.y / cellSize) * cellSize;
+        case SDL_MOUSEMOTION: {
+            int x = event.motion.x / cellSize;
+            int y = event.motion.y / cellSize;
+            switch (event.button.button) {
+                case SDL_BUTTON_LEFT:
+                    board->wallOn(y, x);
+                    break;
+                case SDL_BUTTON_MIDDLE:
+                    board->setStart(y,x);
+                    break;
+                case SDL_BUTTON_RIGHT:
+                    board->setEnd(y,x);
+                    break;
+                default:
+                    cursorGhost.x = x * cellSize;
+                    cursorGhost.y = y * cellSize;
+                    break;
             }
-            if (!mouseActive)
-                mouseActive = SDL_TRUE;
+            active = true;
+            break;
+        }
+        case SDL_MOUSEBUTTONUP:
+            active = true;
             break;
         case SDL_WINDOWEVENT:
             if (event.window.event == SDL_WINDOWEVENT_ENTER && !mouseHover)
                 mouseHover = SDL_TRUE;
             else if (event.window.event == SDL_WINDOWEVENT_LEAVE && mouseHover)
                 mouseHover = SDL_FALSE;
+            active = true;
             break;
         case SDL_QUIT:
             isRunning = false;
@@ -89,48 +100,66 @@ void GUI::handleEvents() {
 }
 
 void GUI::update() {
-    count++;
-    // std::cout << count << "\n";
+    // count++;
+    cursorStart.x = board->getStartCol() * cellSize;
+    cursorStart.y = board->getStartRow() * cellSize;
+    cursorTarget.x = board->getEndCol() * cellSize;
+    cursorTarget.y = board->getEndRow() * cellSize;
+}
+
+void GUI::renderRect(SDL_Rect rect, SDL_Color color) {
+    // Draw grid cursor.
+    SDL_SetRenderDrawColor(renderer, color.r,
+                            color.g, color.b,
+                            color.a);
+    SDL_RenderFillRect(renderer, &rect);
 }
 
 void GUI::render() {
-    SDL_SetRenderDrawColor(renderer, background.r, background.g,background.b, background.a);
-    SDL_RenderClear(renderer);
-    //draw gridlines
-    SDL_SetRenderDrawColor(renderer, lineColor.r, lineColor.g,
-                               lineColor.b, lineColor.a);
+    if (active) {
+        SDL_SetRenderDrawColor(renderer, background.r, background.g,background.b, background.a);
+        SDL_RenderClear(renderer);
+        SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+        //draw walls
+        for (int row = 0; row < gridW; row++) {
+                for (int col = 0; col < gridH; col++) {
+                    if (board->isWall(row, col)) {
+                        SDL_Rect wall = {col*cellSize, row*cellSize, cellSize, cellSize};
+                        renderRect(wall, wallColor);
+                    }
+                }
+            }
+        // Draw grid cursors.
+        renderRect(cursorStart, startCursorColor);
+        renderRect(cursorTarget, targetCursorColor);
+        if (mouseHover) {
+            renderRect(cursorGhost, ghostCursorColor);
+        }
 
-    for (int x = 0; x < 1 + gridW * cellSize; x += cellSize) {
-        SDL_RenderDrawLine(renderer, x, 0, x, winH);
+
+        //draw gridlines
+        SDL_SetRenderDrawColor(renderer, lineColor.r, lineColor.g,
+                                lineColor.b, lineColor.a);
+
+        for (int x = 0; x < 1 + gridW * cellSize; x += cellSize) {
+            SDL_RenderDrawLine(renderer, x, 0, x, winH);
+        }
+
+        for (int y = 0; y < 1 + gridH * cellSize; y += cellSize) {
+            SDL_RenderDrawLine(renderer, 0, y, winW, y);
+        }
+
+
+        // present
+        SDL_RenderPresent(renderer);
+        active = false;
     }
-
-    for (int y = 0; y < 1 + gridH * cellSize; y += cellSize) {
-        SDL_RenderDrawLine(renderer, 0, y, winW, y);
-    }
-
-    // Draw grid ghost cursor.
-    if (mouseActive && mouseHover) {
-        SDL_SetRenderDrawColor(renderer, ghostCursorColor.r,
-                                ghostCursorColor.g,
-                                ghostCursorColor.b,
-                                ghostCursorColor.a);
-        SDL_RenderFillRect(renderer, &cursorGhost);
-    }
-
-    // Draw grid cursor.
-    SDL_SetRenderDrawColor(renderer, gridCursorColor.r,
-                            gridCursorColor.g, gridCursorColor.b,
-                            gridCursorColor.a);
-    SDL_RenderFillRect(renderer, &cursorGrid);
-
-    SDL_RenderPresent(renderer);
-
-
 }
 
 void GUI::clean() {
     SDL_DestroyWindow(window);
     SDL_DestroyRenderer(renderer);
+    delete board;
     SDL_Quit();
     std::cout << "GUI cleaned!\n";
 }

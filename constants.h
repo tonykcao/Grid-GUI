@@ -9,11 +9,7 @@ const int winH = gridH*cellSize +1;
 
 const SDL_Color background = {20, 20, 20, 255}; // Almost black
 const SDL_Color lineColor = {50, 50, 50, 255}; // Dark grey
-const SDL_Color ghostCursorColor = {50, 50, 50, 255};
-const SDL_Color gridCursorColor = {255, 255, 255, 255}; // White
-
-// for light theme
-// const SDL_Color background = {235, 235, 235, 255}; // Almost while
-// const SDL_Color lineColor = {175, 175, 175, 255}; // Light grey
-// const SDL_Color ghostCursorColor = {175, 175, 175, 255};
-// const SDL_Color gridCursorColor = {160, 160, 160, 255}; // grey
+const SDL_Color ghostCursorColor = {50, 50, 50, 255}; // light grey
+const SDL_Color startCursorColor = {255, 255, 255, 255}; // White
+const SDL_Color targetCursorColor = {0, 95, 105, 255}; // Dark cyan
+const SDL_Color wallColor = {200, 95, 105, 255}; // Dark red

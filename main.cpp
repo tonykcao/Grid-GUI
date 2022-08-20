@@ -1,9 +1,7 @@
 #include "GUI.h"
 
-GUI* gui = nullptr;
-
 int main(int argc, const char* argv[]) {
-    gui = new GUI();
+    GUI* gui = new GUI();
 
     gui->init("GameTest", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, winW-1, winH-1, false);
 
