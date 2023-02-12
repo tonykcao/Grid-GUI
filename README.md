@@ -1,4 +1,4 @@
-#Grid GUI
+# Grid GUI
 SDL2 simple grid GUI
 
 Credits: code derived from and inpired by
